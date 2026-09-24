@@ -50,4 +50,4 @@ jobs:
 
       - name: Build APK
         working-directory: android-project
-        run:gradle --no-daemon :app:assembleDebug --stacktrace
+        run: gradle --no-daemon :app:assembleDebug --stacktrace
