@@ -29,6 +29,7 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: Install Android 16 SDK
+        shell: bash
         run: |
           yes | sdkmanager --licenses >/dev/null || true
           sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
@@ -39,19 +40,26 @@ jobs:
           gradle-version: '8.13'
 
       - name: Extract project
+        shell: bash
         run: |
+          rm -rf android-project
           mkdir android-project
           unzip -q NursingProject.zip -d android-project
 
-      - name: Build APK
+      - name: Build debug APK
         working-directory: android-project
         run: gradle --no-daemon :app:assembleDebug
 
       - name: Prepare APK
-        run: cp android-project/app/build/outputs/apk/debug/app-debug.apk NursingDocumentationV4.apk
+        shell: bash
+        run: |
+          cp android-project/app/build/outputs/apk/debug/app-debug.apk NursingDocumentationV4.apk
+          ls -lh NursingDocumentationV4.apk
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: NursingDocumentationV4-APK
           path: NursingDocumentationV4.apk
+          if-no-files-found: error
+          retention-days: 30
