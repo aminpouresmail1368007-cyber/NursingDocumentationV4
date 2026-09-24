@@ -51,3 +51,8 @@ jobs:
       - name: Build APK
         working-directory: android-project
         run: gradle --no-daemon :app:assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: NursingDocumentationV4-APK
+          path: android-project/app/build/outputs/apk/debug/app-debug.apk
